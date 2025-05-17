@@ -1,4 +1,4 @@
-const { GetPlacePhotos, GetPlaceID }  = require( './PlacesSearch.js' );
+const { GetPlacePhotos, GetPlaceID, GetImageRequest }  = require( './PlacesSearch.js' );
 const express = require( 'express' );
 const { body, param, query, validationResult } = require('express-validator')
 
@@ -37,5 +37,40 @@ router.get('/Get/:name/:amount/:width/:height',
     }
 
 });
+
+
+router.get("/Image/:width/:height", 
+    [
+        param('width').isInt(),
+        param('height').isInt(),
+        query('resourcename').isString().notEmpty()
+    ]
+
+    ,
+    async (req, res) => {
+    console.log("attempting Image Request");
+   
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    let name = req.query.resourcename;
+    let width = req.params.width;
+    let height = req.params.height;
+
+    let results = await GetImageRequest(name, width, height);
+    console.log(results);
+
+    if(results != null)
+    {
+        res.status(200).send( JSON.stringify(results) );
+    }
+    else{
+        res.status(500).send('{ error: Internal Server Error  }');
+    }
+
+}
+);
 
 module.exports = router;

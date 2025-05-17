@@ -86,7 +86,7 @@ function ParseImageResourceNames(arrayofphotos)
 async function GetImageRequest(ResourceName, imagewidth, imageHieght)
 {
     const URL = `https://places.googleapis.com/v1/${ResourceName}/media?key=${api_key}&maxHeightPx=${imagewidth}&maxWidthPx=${imageHieght}&skipHttpRedirect=${true}`;
-    
+
     let Results = await axios.get(URL).catch(
         (error) => {
            console.error('Error fetching data:', error);
@@ -168,5 +168,5 @@ async function GetImageURLsFromResourceName(ArrayOfResourceNames, imagewidth, Im
 }
 
 module.exports = {
-    GetPlaceID, GetPlacePhotos
+    GetPlaceID, GetPlacePhotos, GetImageRequest
 }
